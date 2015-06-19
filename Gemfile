@@ -12,6 +12,9 @@ gem 'erubis'
 gem 'sinatra'
 gem 'httparty'
 gem 'haversine'
+gem 'crack'
+gem 'json'
+gem 'HTTParty'
 
 group :development do
   gem 'sqlite3'

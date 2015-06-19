@@ -1,19 +1,21 @@
 require 'active_record'
 require 'yaml'
 
-LOG = true
+if ENV["DATABASE_URL"]
+  # We're on Heroku
+  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
 
-db_config = YAML::load(File.open('config/database.yml'))
-
-env_config = if ENV["TEST"]
-  db_config["test"]
 else
-  db_config["development"]
-end
+  # Do what we've always done
+  db_config = YAML::load(File.open('config/database.yml'))
 
-if LOG
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
-end
+  env_config = if ENV["TEST"]
+    db_config["test"]
+  else
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+    db_config["development"]
+  end
 
-raise "Could not find database config for environment" unless env_config
-ActiveRecord::Base.establish_connection(env_config)
+  raise "Could not find database config for environment" unless env_config
+  ActiveRecord::Base.establish_connection(env_config)
+end

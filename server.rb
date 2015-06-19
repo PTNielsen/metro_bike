@@ -4,31 +4,35 @@ require 'rack/cors'
 require 'pry'
 require './db/setup'
 require './lib/all'
-require 'haversine'
-require './wmata-api'
-require './bikeshare-api'
+require 'httparty'
 
-class MetroBikeApp < Sinatra::Base
+class MetroTransitApp < Sinatra::Base
   enable :logging
   enable :method_override
   enable :sessions
 
-  # wmata = WMATAAPI.new
-  # bike = BikeShareAPI.new
+  set :session_secret, (ENV["SESSION_SECRET"] || "development")
 
-  # def station_haversine user_latitude, user_longitude
-  #   closest_stations = {}
-  #   Station.each do |s|
-  #     station_distance = Haversine.distance(s.station_latitude, s.station_longitude, params[:user_latitude], params[:user_longitude])
-  #     closest_stations.push station_distance.to_mi
-  #   end
-  #   closest_station.sort_by (station_distance)
-  # end
+  use Rack::Cors do
+    allow do
+      origins '*'
+      resource '*', headers: :any, methods: :get
+    end
+  end
 
-  # def bikeshare_distance latitude, longitude
-  #   closest_bikeshare = []
-  #   bikeshare_distance = Haversine.distance(Bikeshare.latitude, Bikeshare.longitude, params[:user_latitude], params[:user_longitude])
+  wmata = WMATAAPI.new
+  bike = BikeShareAPI.new
 
-  # end
+  get "/nearest_stations" do
+    s = wmata.station_distance params[:user_latitude].to_f, params[:user_longitude].to_f
+    t = s.sort_by { |s| s[6] }
+    t.first(3).to_json
+  end
+
+  get "/nearest_bikeshares" do
+    e = bike.bikeshare_distance params[:user_latitude].to_f, params[:user_longitude].to_f
+    k = e.sort_by { |i| i[1] }
+    k.first(3).to_json
+  end
 
 end

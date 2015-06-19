@@ -1,12 +1,13 @@
 require 'httparty'
 require 'json'
+require 'Haversine'
 
 class BikeShareAPI
   # Token = File.read "./token"
 
   include HTTParty
 
-  attr_reader :stations
+  attr_reader :stations, :b
 
   def initialize
     b = HTTParty.get("http://www.capitalbikeshare.com/data/stations/bikeStations.xml")
@@ -22,4 +23,20 @@ class BikeShareAPI
         }).first_or_create!
     end
   end
+
+  def bikeshare_distance user_latitude, user_longitude
+    bikeshare_haversine = []
+    Bikeshare.all.each do |b|
+      bd = (Haversine.distance(b.bikeshare_latitude, b.bikeshare_longitude, user_latitude, user_longitude)).to_mi
+      bikeshare_haversine.push([b.name, bd])
+    end
+    bikeshare_haversine
+  end
+
+  # REAL TIME BIKE INFORMATION FROM "http://www.capitalbikeshare.com/data/stations/bikeStations.xml"
+
+  # def realtime_bike
+  #   bike_availability = @b.map { |n| n.values_at("name", "nbBikes", "nbEmptyDocks") }
+  # end
+
 end
