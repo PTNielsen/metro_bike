@@ -3,7 +3,6 @@ require 'json'
 require 'Haversine'
 
 class BikeShareAPI
-  # Token = File.read "./token"
 
   include HTTParty
 

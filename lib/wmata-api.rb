@@ -35,10 +35,11 @@ class WMATAAPI
     station_haversine
   end
 
-  def realtime_station
-    rs = HTTParty.get("https://api.wmata.com/StationPrediction.svc/json/GetPrediction/{StationCodes}", query: {api_key: "#{Token}"})
-
-    station_status = rs["Metrorail"].map { |n| n.values_at("Destination", "Line", "LocationName", "Min") }
-  end
+  # def realtime_station
+  #   rs = HTTParty.get("https://api.wmata.com/StationPrediction.svc/json/GetPrediction/All", query: {api_key: "#{Token}"})
+  #   current_trains = rs["Trains"].map { |n| n.values_at("LocationCode", "LocationName", "Line", "Destination", "Min") }
+  #   binding.pry
+  #   #current_trains.select { |train| train[0] = "LOCATIONNAME" }
+  # end
 
 end
