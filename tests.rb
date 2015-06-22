@@ -33,9 +33,9 @@ class ServerTest < Minitest::Test
     assert_equal 200, last_response.status
 
     response = JSON.parse last_response.body
-    binding.pry
+
     assert_equal 3, response.count
-    # assert_equal "Dupont Circle", response.first[station_name: "Dupont Circle"]
+    assert_equal "Dupont Circle", response.first.fetch("station_name")
   end
 
   def test_nearest_bikeshares
@@ -51,7 +51,7 @@ class ServerTest < Minitest::Test
     response = JSON.parse last_response.body
 
     assert_equal 3, response.count
-    # assert_equal "17th & K St NW", response.first[0]
+    assert_equal "5th & K St NW", response.first.fetch("name")
   end
 
 end
