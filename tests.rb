@@ -51,7 +51,7 @@ class ServerTest < Minitest::Test
     response = JSON.parse last_response.body
 
     assert_equal 3, response.count
-    assert_equal "5th & K St NW", response.first.fetch("name")
+    assert_equal "17th & K St NW", response.first.fetch("name")
   end
 
 end
