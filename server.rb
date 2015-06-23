@@ -32,17 +32,7 @@ class MetroTransitApp < Sinatra::Base
   end
 
   get "/nearest_bikeshares" do
-    b = bike.bikeshares_by_distance params[:user_latitude].to_f, params[:user_longitude].to_f
-    bike_data_array = []
-    b.first(4).each do |brs|
-      bike_data = {}
-      bike_data[:name] = brs[0]
-      bike_data[:bd] = brs[1]
-
-      bike_data_array.push bike_data
-    end
-    a = bike_data_array.drop(1)
-    a.to_json
+    bike.nearby_bikeshare_information params[:user_latitude].to_f, params[:user_longitude].to_f
   end
 
 end
