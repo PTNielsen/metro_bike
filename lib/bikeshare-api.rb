@@ -35,14 +35,14 @@ class BikeShareAPI
     b = BikeShareAPI.get("")
     stations = b["stations"]["station"]
     bike_availability = stations.map { |n| n.values_at("name", "nbBikes", "nbEmptyDocks", "latestUpdateTime") }
-    bikeshare_array = bike_availability.select { |bike| bike[0] = "#{location}"}
-    sorted_bike = bikeshare_array.sort_by { |b| b[3] }.reverse!.first
+    bikeshare_array = bike_availability.select { |bike| bike[0] == "#{location}"}
     realtime_bike = Hash[
-      :name => sorted_bike[0],
-      :bikes_available => sorted_bike[1],
-      :empty_docks => sorted_bike[2],
-      :last_update => sorted_bike[3]
+      :name => bikeshare_array[0][0],
+      :bikes_available => bikeshare_array[0][1],
+      :empty_docks => bikeshare_array[0][2],
+      :last_update => bikeshare_array[0][3]
     ]
+    binding.pry
   end
 
   def nearby_bikeshare_information user_latitude, user_longitude
