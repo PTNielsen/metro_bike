@@ -69,7 +69,7 @@ class WMATAAPI
       train_data[:upcoming] = WMATAAPI.realtime_station(trs[:station_code])
       train_data_array.push train_data
     end
-    train_data_array.to_json
+    train_data_array
   end
 
 end

@@ -37,7 +37,7 @@ class BikeShareAPI
     bike_availability = stations.map { |n| n.values_at("name", "nbBikes", "nbEmptyDocks", "latestUpdateTime") }
     bikeshare_array = bike_availability.find { |bike| bike[0] == "#{location}"}
     realtime_bike = Hash[
-      :name => bikeshare_array[0],
+      :bikeshare_name => bikeshare_array[0],
       :bikes_available => bikeshare_array[1],
       :empty_docks => bikeshare_array[2],
       :last_update => bikeshare_array[3]
@@ -54,7 +54,7 @@ class BikeShareAPI
       bike_data[:availability] = BikeShareAPI.realtime_bikes(brs[:name])
       bike_data_array.push bike_data
     end
-    bike_data_array.to_json
+    bike_data_array
   end
 
 end
